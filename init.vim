@@ -7,19 +7,19 @@
 :set softtabstop=2
 :set mouse=a
 
+
+
 call plug#begin()
 
 Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
 Plug 'https://github.com/preservim/nerdtree' " NerdTree
 Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
-"Plug 'https://github.com/vim-airline/vim-airline'  Status bar
+Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/lifepillar/pgsql.vim' " PSQL Pluging needs :SQLSetType pgsql.vim
 Plug 'https://github.com/ap/vim-css-color' " CSS Color Preview
 Plug 'https://github.com/rafi/awesome-vim-colorschemes' " Retro Scheme
-Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
-Plug 'neovim/nvim-lspconfig'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -31,22 +31,15 @@ Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}
 
 Plug 'rafamadriz/friendly-snippets'
 
-Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
-
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'm4xshen/autoclose.nvim'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
-Plug 'freddiehaddad/feline.nvim'
 set encoding=UTF-8
 
 call plug#end()
 
-
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind
-
-nmap <F8> :TagbarToggle<CR>
 
 :set completeopt-=preview " For No Previews
 
@@ -54,6 +47,7 @@ nmap <F8> :TagbarToggle<CR>
 
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
+let g:airline#extensions#tabline#enabled = 1
 
 " --- Just Some Notes ---
 " :PlugClean :PlugInstall :UpdateRemotePlugins
@@ -79,7 +73,8 @@ let g:airline_symbols.linenr = ''
 lua << EOF
 	require("mason").setup()
 	require("mason-lspconfig").setup()
-
+	
+	vim.o.shell = "powershell"
 
 	  -- Set up nvim-cmp.
   local cmp = require'cmp'
@@ -154,29 +149,18 @@ lua << EOF
   require('lspconfig')['clangd'].setup {
     capabilities = capabilities
   }
-  require'lspconfig'.clangd.setup{}
   require("luasnip.loaders.from_vscode").lazy_load()
 
 
-
-
-	require("toggleterm").setup({
-		size = 20,
-		open_mapping = [[<c-\>]],
-		shade_terminals = true,
-		direction = 'float',
-		hide_numbers = true,
-		shade_terminals = true;
-		shading_factor = 2,
-		shell = vim.o.shell,
-		close_on_exit = true,
-	})
+	require("autoclose").setup({
+   keys = {
+      ["("] = { escape = true, close = true, pair = "()", disabled_filetypes = {} },
+			["{"] = { escape = true, close = true, pair = "{}", disabled_filetypes = {} },
+   },
+})
 
 
 
-
-	require('feline').setup()
-	require('feline').winbar.setup()
 
 
 EOF
