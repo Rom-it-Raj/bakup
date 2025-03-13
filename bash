@@ -10,6 +10,8 @@ lime=$(tput setaf 83);
 arr=$(tput setaf 123);
 dividerOrange=$(tput setaf 166);
 
+export EDITOR=nvim
+
 PS1="\n\[${usrblue}\]󰣇 \[${dividerOrange}\]\[${cyan}\](";
 PS1+=" \[${usrblue}\]\u \[${cyan}\])";
 PS1+="\[${red}\]  \[${dividerOrange}\]\[${cyan}\](";
@@ -19,25 +21,26 @@ PS1+="\[${lime}\] \@ \[${cyan}\])\n\[${arr}\] 󰘍 \[${white}\]"
 
 export PS1;
 
-
 alias update='yay -Syuu'
 alias ninit='nvim ~/.config/nvim/init.vim'
-alias tf='gdu'
-alias about='archey3'
+alias tf='gdu / -i /mnt/c,/usr/lib/wsl -C'
+alias about='neofetch'
 alias src='source ~/.bashrc'
 alias h='cd ~'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias c='clear'
-alias bash='nvim ~/.bashrc'
 alias src='source ~/.bashrc'
 alias ls='lsd --color=auto'
 alias grep='grep --color=auto'
 alias ll='lsd -lah --color=auto'
+alias la='ls -a'
 alias yayc='yay -Rc $(yay -Qtdq)'
 alias py='cd ~/dev/python && source ~/dev/python/.venv/bin/activate'
 alias de='deactivate && cd ~'
 alias bak='cp ~/.bashrc ~/bakup/bash && cp ~/.config/nvim/init.vim ~/bakup/nvim'
+alias exp='cd dev/express'
+alias web='explorer.exe "C:\Program Files\Zen Browser\zen.exe"'
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -63,3 +66,13 @@ r (){
 	./$val
 }
 export -f r;
+
+del (){
+	yay -Rc $(yay -Qq | grep $1)
+}
+export -f del;
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
