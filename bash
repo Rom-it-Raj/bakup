@@ -21,11 +21,10 @@ PS1+="\[${lime}\] \@ \[${cyan}\])\n\[${arr}\] 󰘍 \[${white}\]"
 
 export PS1;
 
-alias update='yay -Syuu'
+alias up='yay -Syuu'
 alias ninit='nvim ~/.config/nvim/init.vim'
 alias tf='gdu / -i /mnt/c,/usr/lib/wsl -C'
 alias about='neofetch'
-alias src='source ~/.bashrc'
 alias h='cd ~'
 alias ..='cd ..'
 alias ...='cd ../..'
