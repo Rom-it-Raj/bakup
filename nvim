@@ -49,6 +49,12 @@ Plug 'https://github.com/folke/tokyonight.nvim.git'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+Plug 'https://github.com/rebelot/kanagawa.nvim.git'
+Plug 'zaldih/themery.nvim'
+
+Plug 'https://github.com/enricobacis/vim-airline-clock.git'
+
+Plug 'https://github.com/folke/trouble.nvim.git'
 
 
 set encoding=UTF-8
@@ -57,7 +63,7 @@ call plug#end()
 
 :set completeopt-=preview " For No Previews
 
-:colorscheme monokai-pro
+:colorscheme purify
 
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
@@ -84,6 +90,7 @@ let g:airline_symbols.linenr = ''
 
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-q> :Themery<CR>
 
 nnoremap <C-j> :bn <CR>
 nnoremap <C-k> :bp <CR>
@@ -94,6 +101,7 @@ nnoremap <C-f> <cmd>Telescope find_files<cr>
 nnoremap <C-g> <cmd>Telescope live_grep<cr>
 nnoremap <C-b> <cmd>Telescope buffers<cr>
 nnoremap <C-h> <cmd>Telescope help_tags<cr>
+
 
 lua << EOF
 	require("mason").setup()
@@ -194,4 +202,11 @@ lua << EOF
 	require('telescope').setup{}
 	
 	require("toggleterm").setup()
+
+	-- Minimal config
+	require("themery").setup({
+		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon"}, -- Your list of installed colorschemes.
+	 livePreview = true, -- Apply theme while picking. Default to true.
+	})
+
 EOF

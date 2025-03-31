@@ -22,6 +22,7 @@ PS1+="\[${lime}\] \@ \[${cyan}\])\n\[${arr}\] 󰘍 \[${white}\]"
 export PS1;
 
 alias up='yay -Syuu'
+alias lz='lazygit'
 alias ninit='nvim ~/.config/nvim/init.vim'
 alias tf='gdu / -i /mnt/c,/usr/lib/wsl -C'
 alias about='neofetch'
