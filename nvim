@@ -57,7 +57,8 @@ Plug 'https://github.com/enricobacis/vim-airline-clock.git'
 Plug 'https://github.com/folke/trouble.nvim.git'
 
 Plug 'https://github.com/lukas-reineke/indent-blankline.nvim.git'
-
+Plug 'https://github.com/iagorrr/noctis-high-contrast.nvim.git'
+Plug 'https://github.com/scottmckendry/cyberdream.nvim.git'
 
 set encoding=UTF-8
 
@@ -207,7 +208,7 @@ lua << EOF
 
 	-- Minimal config
 	require("themery").setup({
-		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon"}, -- Your list of installed colorschemes.
+		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "noctishc", "cyberdream"}, -- Your list of installed colorschemes.
 	 livePreview = true, -- Apply theme while picking. Default to true.
 	})
 	
@@ -236,4 +237,7 @@ hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
 end)
 
 require("ibl").setup { indent = { highlight = highlight } }
+require("noctishc").setup()
+
+require('cyberdream').setup()
 EOF
