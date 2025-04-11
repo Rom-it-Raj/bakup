@@ -57,7 +57,6 @@ Plug 'https://github.com/enricobacis/vim-airline-clock.git'
 Plug 'https://github.com/folke/trouble.nvim.git'
 
 Plug 'https://github.com/lukas-reineke/indent-blankline.nvim.git'
-Plug 'https://github.com/iagorrr/noctis-high-contrast.nvim.git'
 Plug 'https://github.com/scottmckendry/cyberdream.nvim.git'
 
 set encoding=UTF-8
@@ -184,8 +183,11 @@ lua << EOF
     capabilities = capabilities
   }
 	require('lspconfig')['ts_ls'].setup{
-	capabilities=capabilities
+		capabilities=capabilities
 	}
+	--require('lspconfig')['pyright'].setup{
+		--capabilities=capabilities
+	--}
   require("luasnip.loaders.from_vscode").lazy_load()
 
 
@@ -208,7 +210,7 @@ lua << EOF
 
 	-- Minimal config
 	require("themery").setup({
-		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "noctishc", "cyberdream"}, -- Your list of installed colorschemes.
+		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "cyberdream"}, -- Your list of installed colorschemes.
 	 livePreview = true, -- Apply theme while picking. Default to true.
 	})
 	
@@ -237,7 +239,19 @@ hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
 end)
 
 require("ibl").setup { indent = { highlight = highlight } }
-require("noctishc").setup()
 
 require('cyberdream').setup()
+
+vim.diagnostic.config {
+	underline = true,
+	virtual_text = {
+		prefix = "",
+		severity = nil,
+		source = "if_many",
+		format = nil,
+	},
+	signs = true,
+	severity_sort = true,
+	update_in_insert = false,
+}
 EOF
