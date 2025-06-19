@@ -21,7 +21,7 @@ PS1+="\[${lime}\] \@ \[${cyan}\])\n\[${arr}\] 󰘍 \[${white}\]"
 
 export PS1;
 
-alias up='yay -Syuu'
+alias up='sudo pacman -Syuu'
 alias lz='lazygit'
 alias ninit='nvim ~/.config/nvim/init.vim'
 alias tf='gdu / -i /mnt/c,/usr/lib/wsl -C'
@@ -39,8 +39,12 @@ alias yayc='yay -Rc $(yay -Qtdq)'
 alias py='cd ~/dev/python && source ~/dev/python/.venv/bin/activate'
 alias de='deactivate && cd ~'
 alias bak='cp ~/.bashrc ~/bakup/bash && cp ~/.config/nvim/init.vim ~/bakup/nvim'
-alias exp='cd dev/express'
 alias web='explorer.exe "C:\Program Files\Zen Browser\zen.exe"'
+alias web2='torbrowser-launcher'
+alias php='cd /srv/http'
+alias down='wsl.exe --shutdown'
+alias pyt='cd ~/dev/python/test && source ../.env/bin/activate'
+alias btop='sudo btop'
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -62,8 +66,25 @@ r (){
 	base=${file%.*}
 	val="O"
 	val+=$base
-	clang $file -o $val
-	./$val
+	case "$file" in
+		*.cpp) echo "compiling cpp file"
+			g++ $file -o $val
+			./$val
+		;;
+		*.c) echo "compiling c file"
+			clang $file -o $val
+			./$val
+		;;
+		*.py) echo "running python file"
+			python $file
+		;;
+		*.cs) echo "running C sharp file"
+			dotnet run $file
+		;;
+		*) echo "not good file"
+		;;
+	esac
+	
 }
 export -f r;
 
@@ -72,3 +93,10 @@ del (){
 }
 export -f del;
 
+nvf(){
+	file=$(fzf --preview "cat {}")
+	if [ -n "$file" ]; then
+		nvim "$file"
+	fi
+}
+export -f nvf;

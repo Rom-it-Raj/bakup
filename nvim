@@ -7,8 +7,6 @@
 :set softtabstop=2
 :set mouse=a
 
-
-
 call plug#begin()
 
 Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
@@ -36,6 +34,7 @@ Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 
 Plug 'ryanoasis/vim-devicons'
+"Plug 'nvim-tree/nvim-web-devicons'
 
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
@@ -59,17 +58,27 @@ Plug 'https://github.com/folke/trouble.nvim.git'
 Plug 'https://github.com/lukas-reineke/indent-blankline.nvim.git'
 Plug 'https://github.com/scottmckendry/cyberdream.nvim.git'
 
+Plug 'https://github.com/tiagovla/tokyodark.nvim.git'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'https://github.com/lewis6991/gitsigns.nvim.git'
+Plug 'https://github.com/jmbuhr/otter.nvim.git'
+
+
+Plug 'https://github.com/norcalli/nvim-colorizer.lua.git'
+
 set encoding=UTF-8
 
 call plug#end()
 
-:set completeopt-=preview " For No Previews
+:set completeopt-=preview "For No Previews
 
 :colorscheme purify
 
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme="jellybeans"
 
 " --- Just Some Notes ---
 " :PlugClean :PlugInstall :UpdateRemotePlugins
@@ -97,12 +106,14 @@ nnoremap <C-q> :Themery<CR>
 nnoremap <C-j> :bn <CR>
 nnoremap <C-k> :bp <CR>
 
-nnoremap <C-\> :ToggleTerm size=7 direction=horizontal <CR>
+nnoremap <C-\> :ToggleTerm size=10 direction=horizontal <CR>
+nnoremap <C-]> :ToggleTerm direction=float <CR>
 
 nnoremap <C-f> <cmd>Telescope find_files<cr>
 nnoremap <C-g> <cmd>Telescope live_grep<cr>
 nnoremap <C-b> <cmd>Telescope buffers<cr>
 nnoremap <C-h> <cmd>Telescope help_tags<cr>
+
 
 
 lua << EOF
@@ -124,8 +135,8 @@ lua << EOF
       end,
     },
     window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
     },
     mapping = cmp.mapping.preset.insert({
       ['<C-z>'] = cmp.mapping.scroll_docs(-4),
@@ -154,10 +165,10 @@ lua << EOF
       { name = 'buffer' },
     })
  })
- require("cmp_git").setup() ]]-- 
+	require("cmp_git").setup() ]]-- 
 
-  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline({ '/', '?' }, {
+	-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+	cmp.setup.cmdline({ '/', '?' }, {
     mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = 'buffer' }
@@ -182,13 +193,16 @@ lua << EOF
   require('lspconfig')['clangd'].setup {
     capabilities = capabilities
   }
-	require('lspconfig')['ts_ls'].setup{
+	require('lspconfig')['omnisharp'].setup{
 		capabilities=capabilities
 	}
-	--require('lspconfig')['pyright'].setup{
-		--capabilities=capabilities
+	--	require('lspconfig')['rust-analyser'].setup{
+	--	capabilities=capabilities
 	--}
-  require("luasnip.loaders.from_vscode").lazy_load()
+	--require('lspconfig')['pyright'].setup{
+	--capabilities=capabilities
+	--}
+	require("luasnip.loaders.from_vscode").lazy_load()
 
 
 	require("autoclose").setup({
@@ -199,7 +213,7 @@ lua << EOF
 })
 
 	require'nvim-treesitter.configs'.setup {
-		ensure_installed = {'c', 'cpp', 'javascript', 'lua', 'vim', 'python'},
+		ensure_installed = {'c', 'cpp', 'lua', 'vim', 'c_sharp'},
 		highlight={ 
 			enable=true,
 		}
@@ -208,9 +222,10 @@ lua << EOF
 	
 	require("toggleterm").setup()
 
+
 	-- Minimal config
 	require("themery").setup({
-		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "cyberdream"}, -- Your list of installed colorschemes.
+		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "cyberdream", "tokyodark"}, -- Your list of installed colorschemes.
 	 livePreview = true, -- Apply theme while picking. Default to true.
 	})
 	
@@ -254,4 +269,9 @@ vim.diagnostic.config {
 	severity_sort = true,
 	update_in_insert = false,
 }
+
+require('gitsigns').setup()
+
+require('colorizer').setup()
+
 EOF
