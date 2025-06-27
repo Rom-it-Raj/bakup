@@ -41,7 +41,7 @@ alias web='explorer.exe "C:\Program Files\Zen Browser\zen.exe"'
 alias web2='torbrowser-launcher'
 alias php='cd /srv/http'
 alias down='wsl.exe --shutdown'
-alias pyt='cd ~/dev/python/django && source .venv/bin/activate'
+alias pyt='cd ~/dev/python/django/next_kazi && source ../.venv/bin/activate'
 alias btop='sudo btop'
 
 function y() {

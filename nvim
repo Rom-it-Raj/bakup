@@ -1,11 +1,14 @@
-:set number
-:set relativenumber
 :set autoindent
 :set tabstop=2
 :set shiftwidth=2
 :set smarttab
 :set softtabstop=2
 :set mouse=a
+:set foldcolumn=1
+:set foldmethod=indent
+:set foldlevel=99
+:set rnu
+
 
 call plug#begin()
 
@@ -66,6 +69,7 @@ Plug 'https://github.com/jmbuhr/otter.nvim.git'
 
 
 Plug 'https://github.com/norcalli/nvim-colorizer.lua.git'
+
 
 set encoding=UTF-8
 
@@ -273,5 +277,6 @@ vim.diagnostic.config {
 require('gitsigns').setup()
 
 require('colorizer').setup()
+
 
 EOF
