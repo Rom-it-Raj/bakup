@@ -33,7 +33,7 @@ alias c='clear'
 alias src='source ~/.bashrc'
 alias ls='lsd --color=auto'
 alias grep='grep --color=auto'
-alias ll='lsd -lah --color=auto'
+alias ll='lsd -FXlah --color=auto'
 alias la='ls -a'
 alias yayc='yay -Rc $(yay -Qtdq)'
 alias bak='cp ~/.bashrc ~/bakup/bash && cp ~/.config/nvim/init.vim ~/bakup/nvim'
@@ -64,6 +64,7 @@ r (){
 	base=${file%.*}
 	val="O"
 	val+=$base
+
 	case "$file" in
 		*.cpp) echo "compiling cpp file"
 			g++ $file -o $val
@@ -78,6 +79,9 @@ r (){
 		;;
 		*.cs) echo "running C sharp file"
 			dotnet run $file
+		;;
+		*.java) echo "running Java file"
+			java $file
 		;;
 		*) echo "not good file"
 		;;
@@ -98,3 +102,8 @@ nvf(){
 	fi
 }
 export -f nvf;
+
+rr (){
+	rm -r $1
+}
+export -f rr;

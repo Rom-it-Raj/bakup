@@ -1,0 +1,329 @@
+:set autoindent
+:set tabstop=2
+:set shiftwidth=2
+:set smarttab
+:set softtabstop=2
+:set mouse=a
+:set foldcolumn=1
+:set foldmethod=indent
+:set foldlevel=99
+:set rnu
+
+
+call plug#begin()
+
+Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
+Plug 'https://github.com/preservim/nerdtree' " NerdTree
+Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
+Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'https://github.com/lifepillar/pgsql.vim' " PSQL Pluging needs :SQLSetType pgsql.vim
+Plug 'https://github.com/ap/vim-css-color' " CSS Color Preview
+Plug 'https://github.com/rafi/awesome-vim-colorschemes' " Retro Scheme
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+" follow latest release and install jsregexp.
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}
+
+Plug 'rafamadriz/friendly-snippets'
+
+Plug 'm4xshen/autoclose.nvim'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+
+Plug 'ryanoasis/vim-devicons'
+"Plug 'nvim-tree/nvim-web-devicons'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
+" or                                , { 'branch': '0.1.x' }
+
+
+Plug 'loctvl842/monokai-pro.nvim'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'https://github.com/folke/tokyonight.nvim.git'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+Plug 'https://github.com/rebelot/kanagawa.nvim.git'
+Plug 'zaldih/themery.nvim'
+
+Plug 'https://github.com/enricobacis/vim-airline-clock.git'
+
+Plug 'https://github.com/folke/trouble.nvim.git'
+
+Plug 'https://github.com/lukas-reineke/indent-blankline.nvim.git'
+Plug 'https://github.com/scottmckendry/cyberdream.nvim.git'
+
+Plug 'https://github.com/tiagovla/tokyodark.nvim.git'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'https://github.com/lewis6991/gitsigns.nvim.git'
+Plug 'https://github.com/jmbuhr/otter.nvim.git'
+
+
+Plug 'https://github.com/norcalli/nvim-colorizer.lua.git'
+
+
+Plug 'kevinhwang91/nvim-ufo'
+Plug 'kevinhwang91/promise-async'
+Plug 'https://github.com/nvimtools/none-ls.nvim.git'
+Plug 'https://github.com/RaafatTurki/hex.nvim.git'
+
+Plug 'folke/noice.nvim'
+Plug 'MunifTanjim/nui.nvim'
+
+
+set encoding=UTF-8
+
+call plug#end()
+
+:set completeopt-=preview "For No Previews
+
+:colorscheme purify
+
+let g:NERDTreeDirArrowExpandable="+"
+let g:NERDTreeDirArrowCollapsible="~"
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme="jellybeans"
+
+" --- Just Some Notes ---
+" :PlugClean :PlugInstall :UpdateRemotePlugins
+
+" air-line
+let g:airline_powerline_fonts = 1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-q> :Themery<CR>
+
+nnoremap <C-j> :bn <CR>
+nnoremap <C-k> :bp <CR>
+
+nnoremap <C-\> :ToggleTerm size=10 direction=horizontal <CR>
+nnoremap <C-]> :ToggleTerm direction=float <CR>
+
+nnoremap <C-f> <cmd>Telescope find_files<cr>
+nnoremap <C-g> <cmd>Telescope live_grep<cr>
+nnoremap <C-b> <cmd>Telescope buffers<cr>
+nnoremap <C-h> <cmd>Telescope help_tags<cr>
+nnoremap <C-x> :HexToggle <CR>
+
+
+nnoremap <C-m> <cmd>lua vim.lsp.buf.format() <CR>
+
+
+
+lua << EOF
+	require("mason").setup()
+	require("mason-lspconfig").setup()
+	
+	  -- Set up nvim-cmp.
+  local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        -- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+      end,
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-z>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-d>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' }, -- For vsnip users.
+      { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- To use git you need to install the plugin petertriho/cmp-git and uncomment lines below
+  -- Set configuration for specific filetype.
+  --[[ cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'git' },
+    }, {
+      { name = 'buffer' },
+    })
+ })
+	require("cmp_git").setup() ]]-- 
+
+	-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+	cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    }),
+    matching = { disallow_symbol_nonprefix_matching = false }
+  })
+
+  -- Set up lspconfig.
+  local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  require('lspconfig')['clangd'].setup {
+    capabilities = capabilities
+  }
+	require('lspconfig')['omnisharp'].setup{
+		capabilities=capabilities
+	}
+	require('lspconfig')['jdtls'].setup{
+		capabilities=capabilities
+	}
+	--	require('lspconfig')['rust-analyser'].setup{
+	--	capabilities=capabilities
+	--}
+	--require('lspconfig')['pyright'].setup{
+	--capabilities=capabilities
+	--}
+	require("luasnip.loaders.from_vscode").lazy_load()
+
+
+	require("autoclose").setup({
+   keys = {
+      ["("] = { escape = true, close = true, pair = "()", disabled_filetypes = {} },
+			["{"] = { escape = true, close = true, pair = "{}", disabled_filetypes = {} },
+   },
+})
+
+	require'nvim-treesitter.configs'.setup {
+		ensure_installed = {'c', 'cpp', 'lua', 'vim', 'c_sharp', 'java'},
+		highlight={ 
+			enable=true,
+		}
+	}
+	require('telescope').setup{}
+	
+	require("toggleterm").setup()
+
+
+	-- Minimal config
+	require("themery").setup({
+		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "cyberdream", "tokyodark"}, -- Your list of installed colorschemes.
+	 livePreview = true, -- Apply theme while picking. Default to true.
+	})
+	
+
+	local highlight = {
+    "RainbowRed",
+    "RainbowYellow",
+    "RainbowBlue",
+    "RainbowOrange",
+    "RainbowGreen",
+    "RainbowViolet",
+    "RainbowCyan",
+	}
+
+local hooks = require "ibl.hooks"
+-- create the highlight groups in the highlight setup hook, so they are reset
+-- every time the colorscheme changes
+hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+    vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+    vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+    vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+    vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+    vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+    vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+    vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+end)
+
+require("ibl").setup { indent = { highlight = highlight } }
+
+require('cyberdream').setup()
+
+vim.diagnostic.config {
+	underline = true,
+	virtual_text = {
+		prefix = "",
+		severity = nil,
+		source = "if_many",
+		format = nil,
+	},
+	signs = true,
+	severity_sort = true,
+	update_in_insert = false,
+}
+
+require('gitsigns').setup()
+
+require('colorizer').setup()
+
+require('ufo').setup({
+  provider_selector = function(bufnr, filetype, buftype)
+		return {'treesitter', 'indent'}
+  end
+})
+
+
+local null_ls = require('null-ls')
+null_ls.setup({
+sources = {
+	null_ls.builtins.formatting.prettierd.with({
+		filetypes = {
+			"javascript", 
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			"css",
+			}
+	}),
+	null_ls.builtins.formatting.black.with({
+		filetypes = {
+			"python",
+			}
+	}),
+	} 
+})
+
+require'hex'.setup()
+
+require'noice'.setup()
+
+
+EOF
