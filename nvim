@@ -213,9 +213,6 @@ lua << EOF
 	require('lspconfig')['omnisharp'].setup{
 		capabilities=capabilities
 	}
-	require('lspconfig')['jdtls'].setup{
-		capabilities=capabilities
-	}
 	--	require('lspconfig')['rust-analyser'].setup{
 	--	capabilities=capabilities
 	--}
@@ -233,7 +230,7 @@ lua << EOF
 })
 
 	require'nvim-treesitter.configs'.setup {
-		ensure_installed = {'c', 'cpp', 'lua', 'vim', 'c_sharp', 'java'},
+		ensure_installed = {'c', 'cpp', 'lua', 'vim', 'c_sharp'}, 
 		highlight={ 
 			enable=true,
 		}
