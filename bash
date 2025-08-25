@@ -21,6 +21,8 @@ PS1+="\[${lime}\] \@ \[${cyan}\])\n\[${arr}\] 󰘍 \[${white}\]"
 
 export PS1;
 
+
+alias :wq='exit'
 alias up='sudo pacman -Syuu'
 alias lz='lazygit'
 alias ninit='nvim ~/.config/nvim/init.vim'
@@ -39,10 +41,11 @@ alias yayc='yay -Rc $(yay -Qtdq)'
 alias bak='cp ~/.bashrc ~/bakup/bash && cp ~/.config/nvim/init.vim ~/bakup/nvim'
 alias web='explorer.exe "C:\Program Files\Zen Browser\zen.exe"'
 alias web2='torbrowser-launcher'
-alias php='cd /srv/http'
 alias down='wsl.exe --shutdown'
 alias pyt='cd ~/dev/python/django/next_kazi && source ../.venv/bin/activate'
-alias btop='sudo btop'
+alias stop='sudo btop'
+alias sql='psql -U rom -d test'
+
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -108,3 +111,5 @@ rr (){
 }
 export -f rr;
 
+
+. "$HOME/.local/bin/env"

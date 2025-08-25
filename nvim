@@ -8,6 +8,7 @@
 :set foldmethod=indent
 :set foldlevel=99
 :set rnu
+:set termguicolors
 
 
 call plug#begin()
@@ -78,6 +79,7 @@ Plug 'https://github.com/RaafatTurki/hex.nvim.git'
 
 Plug 'folke/noice.nvim'
 Plug 'MunifTanjim/nui.nvim'
+Plug 'rcarriga/nvim-notify'
 
 
 set encoding=UTF-8
@@ -230,7 +232,7 @@ lua << EOF
 })
 
 	require'nvim-treesitter.configs'.setup {
-		ensure_installed = {'c', 'cpp', 'lua', 'vim', 'c_sharp'}, 
+		ensure_installed = {'c', 'cpp', 'lua', 'vim', 'python'}, 
 		highlight={ 
 			enable=true,
 		}
@@ -315,12 +317,34 @@ sources = {
 			"python",
 			}
 	}),
+	null_ls.builtins.formatting.clang_format.with({
+		filetypes = {
+			"cpp, c",
+			}
+	}),
 	} 
 })
 
 require'hex'.setup()
 
-require'noice'.setup()
+require('noice').setup()
+
+require'notify'.setup({
+	background_colour = "#010101",
+})
+
+require'noice'.setup({
+	cmdline	= {
+		enabled=true,
+		view="cmdline_popup",
+		},
+	messages={
+		enabled=true,
+  	view='notify',
+		view_error='notify',
+		view_warn='notify',
+	}
+})
 
 
 EOF
