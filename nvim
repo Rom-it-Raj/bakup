@@ -8,6 +8,7 @@
 :set foldmethod=indent
 :set foldlevel=99
 :set rnu
+:set nu
 :set termguicolors
 
 
@@ -129,8 +130,6 @@ nnoremap <C-g> <cmd>Telescope live_grep<cr>
 nnoremap <C-b> <cmd>Telescope buffers<cr>
 nnoremap <C-h> <cmd>Telescope help_tags<cr>
 nnoremap <C-x> :HexToggle <CR>
-
-
 nnoremap <C-m> <cmd>lua vim.lsp.buf.format() <CR>
 
 
