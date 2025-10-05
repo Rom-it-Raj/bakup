@@ -45,6 +45,7 @@ alias down='wsl.exe --shutdown'
 alias pyt='cd ~/dev/python/django/next_kazi && source ../.venv/bin/activate'
 alias stop='sudo btop'
 alias sql='psql -U rom -d test'
+alias smp='GDK_SCALE=2 java -jar ~/dev/mp8085/8085Compiler.jar'
 alias mp='java -jar ~/dev/mp8085/8085Compiler.jar'
 alias yt='youtube-tui'
 
