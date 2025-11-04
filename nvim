@@ -83,9 +83,14 @@ Plug 'MunifTanjim/nui.nvim'
 Plug 'rcarriga/nvim-notify'
 
 
-set encoding=UTF-8
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " Recommended, not required.
+Plug 'daltonmenezes/aura-theme', { 'rtp': 'packages/neovim' }
+
 
 call plug#end()
+
+set encoding=UTF-8
+
 
 :set completeopt-=preview "For No Previews
 
@@ -243,7 +248,7 @@ lua << EOF
 
 	-- Minimal config
 	require("themery").setup({
-		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "cyberdream", "tokyodark"}, -- Your list of installed colorschemes.
+		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "cyberdream", "tokyodark", "aura-dark"}, -- Your list of installed colorschemes.
 	 livePreview = true, -- Apply theme while picking. Default to true.
 	})
 	
@@ -346,4 +351,10 @@ require'noice'.setup({
 })
 
 
+require('lspconfig').verible.setup{
+	cmd = {'verible-verilog-ls', '--rules_config_search'},
+}
+
 EOF
+
+autocmd BufWritePost *.v lua vim.lsp.buf.format({ async = false })

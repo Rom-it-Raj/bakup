@@ -27,6 +27,7 @@ alias up='sudo pacman -Syuu'
 alias lz='lazygit'
 alias ninit='nvim ~/.config/nvim/init.vim'
 alias tf='gdu / -i /mnt/c,/usr/lib/wsl -C'
+alias tfg='baobab'
 alias about='fastfetch'
 alias h='cd ~'
 alias ..='cd ..'
@@ -42,13 +43,12 @@ alias bak='cp ~/.bashrc ~/bakup/bash && cp ~/.config/nvim/init.vim ~/bakup/nvim'
 alias web='explorer.exe "C:\Program Files\Zen Browser\zen.exe"'
 alias web2='torbrowser-launcher'
 alias down='wsl.exe --shutdown'
-alias pyt='cd ~/dev/python/django/next_kazi && source ../.venv/bin/activate'
 alias stop='sudo btop'
 alias sql='psql -U rom -d test'
 alias smp='GDK_SCALE=2 java -jar ~/dev/mp8085/8085Compiler.jar'
 alias mp='java -jar ~/dev/mp8085/8085Compiler.jar'
 alias yt='youtube-tui'
-
+alias kaz='cd ~/dev/web/kazilen-backend && source venv/bin/activate'
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -88,6 +88,9 @@ r (){
 		;;
 		*.java) echo "running Java file"
 			java $file
+		;;
+		*.lua) echo "running luau"
+			luau $file
 		;;
 		*) echo "not good file"
 		;;
