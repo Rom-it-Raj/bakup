@@ -83,8 +83,9 @@ Plug 'MunifTanjim/nui.nvim'
 Plug 'rcarriga/nvim-notify'
 
 
-Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " Recommended, not required.
 Plug 'daltonmenezes/aura-theme', { 'rtp': 'packages/neovim' }
+
+Plug 'https://github.com/lewis6991/gitsigns.nvim.git'
 
 
 call plug#end()
@@ -225,6 +226,9 @@ lua << EOF
 	--require('lspconfig')['pyright'].setup{
 	--capabilities=capabilities
 	--}
+	require('lspconfig')['neocmake'].setup({
+		capabilities = capabilities
+	})
 	require("luasnip.loaders.from_vscode").lazy_load()
 
 
@@ -355,6 +359,7 @@ require('lspconfig').verible.setup{
 	cmd = {'verible-verilog-ls', '--rules_config_search'},
 }
 
+require("gitsigns").setup()
 EOF
 
 autocmd BufWritePost *.v lua vim.lsp.buf.format({ async = false })

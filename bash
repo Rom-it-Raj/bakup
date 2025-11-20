@@ -9,15 +9,31 @@ yellow=$(tput setaf 46);
 lime=$(tput setaf 83);
 arr=$(tput setaf 123);
 dividerOrange=$(tput setaf 166);
-
+gitcol=$(tput setaf 189);
 export EDITOR=nvim
+
+function git_prompt() {
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        local branch=$(git rev-parse --abbrev-ref HEAD)
+        local status=''
+        if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+            status=' 󱘒 '
+				else
+					status='  '
+        fi
+        echo " [ ${branch} ][${status}]"
+		else
+			echo " [ 󰟢 ]"
+    fi
+}
 
 PS1="\n\[${usrblue}\]󰣇 \[${dividerOrange}\]\[${cyan}\](";
 PS1+=" \[${usrblue}\]\u \[${cyan}\])";
 PS1+="\[${red}\]  \[${dividerOrange}\]\[${cyan}\](";
 PS1+="\[${orange}\] \W \[${cyan}\])";
 PS1+="\[${orange}\]  \[${dividerOrange}\]\[${cyan}\](";
-PS1+="\[${lime}\] \@ \[${cyan}\])\n\[${arr}\] 󰘍 \[${white}\]"
+PS1+="\[${lime}\] \@ \[${cyan}\])";
+PS1+="\[${dividerOrange}\] \[${gitcol}\] \$(git_prompt)\n\[${arr}\] 󰘍 \[${white}\]"
 
 export PS1;
 
@@ -49,6 +65,10 @@ alias smp='GDK_SCALE=2 java -jar ~/dev/mp8085/8085Compiler.jar'
 alias mp='java -jar ~/dev/mp8085/8085Compiler.jar'
 alias yt='youtube-tui'
 alias kaz='cd ~/dev/web/kazilen-backend && source venv/bin/activate'
+
+
+
+
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -113,7 +133,7 @@ nvf(){
 export -f nvf;
 
 rr (){
-	rm -r $1
+	sudo rm -r $1
 }
 export -f rr;
 
