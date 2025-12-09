@@ -62,7 +62,7 @@ alias sql='psql -U rom -d test'
 alias smp='GDK_SCALE=2 java -jar ~/dev/mp8085/8085Compiler.jar'
 alias mp='java -jar ~/dev/kollege/mp8085/8085Compiler.jar'
 alias yt='youtube-tui'
-alias kaz='cd ~/dev/web/kazilen-backend && source venv/bin/activate'
+alias kaz='cd ~/dev/web/kazilen-backend/djangoproj && source .env/bin/activate'
 alias yc='yazi'
 
 

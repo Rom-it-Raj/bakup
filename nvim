@@ -229,6 +229,21 @@ lua << EOF
 	require('lspconfig')['neocmake'].setup({
 		capabilities = capabilities
 	})
+	require('lspconfig')['html-lsp'].setup({
+		settings={
+			html={
+				fileAssociations={
+					"*.html",
+					"*.js",
+				},
+			}
+		},
+		filetypes={
+			"html",
+			"js",
+		},
+	})
+
 	require("luasnip.loaders.from_vscode").lazy_load()
 
 
@@ -360,6 +375,8 @@ require('lspconfig').verible.setup{
 }
 
 require("gitsigns").setup()
+
+
 EOF
 
 autocmd BufWritePost *.v lua vim.lsp.buf.format({ async = false })
