@@ -145,7 +145,7 @@ export -f rr;
 
 gac (){
 	local Ctime=$(date)
-	local dmsg="Did work at ${Ctime}"
+	local dmsg="!Automated message! Did work at ${Ctime}"
 	if [ -n "$1" ]; then
 		local cmsg="$1"
 	else

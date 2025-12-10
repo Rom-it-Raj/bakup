@@ -232,10 +232,23 @@ lua << EOF
 		on_attach = on_attach,
 		capabilities = capabilities,
 		})
+
+	local projectRoot = vim.loop.cwd()
+	local venvName = ".env"
+	local envPath = projectRoot ..'/'..venvName
+	local pythonPath = envPath..'/bin/python'
+
 	vim.lsp.config('pyright', {
 		on_attach = on_attach,
 		capabilities = capabilities,
+		settings = {
+			python = {
+				venvPath = projectRoot,
+				venv = venvName
+				}
+			}
 		})
+
 	vim.lsp.config('html', {
 		on_attach = on_attach,
 		capabilities = capabilities,
