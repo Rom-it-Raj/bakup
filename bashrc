@@ -92,10 +92,10 @@ mcd (){
 export -f mcd;
 
 r (){
-	file=$1
-	base=${file%.*}
-	val="O"
-	val+=$base
+	local file=$1
+	local base=${file%.*}
+	local val="O"
+	local val+=$base
 
 	case "$file" in
 		*.cpp) echo "compiling cpp file"
@@ -143,5 +143,17 @@ rr (){
 }
 export -f rr;
 
+gac (){
+	local Ctime=$(date)
+	local dmsg="Did work at ${Ctime}"
+	if [ -n "$1" ]; then
+		local cmsg="$1"
+	else
+		local cmsg="$dmsg"
+	fi
+
+	git add .
+	git commit -m "${cmsg}"
+}
 
 . "$HOME/.local/bin/env"
