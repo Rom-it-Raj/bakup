@@ -276,7 +276,11 @@ lua << EOF
 				},
 			},
 		})
-	vim.lsp.enable({'clangd', 'eslint', 'html', 'pyright', 'lua_lsp', 'neocmake'})
+	vim.lsp.config('rust_analyser', {
+		on_attach = on_attach,
+		capabilities = capabilities,
+		})
+	vim.lsp.enable({'clangd', 'eslint', 'html', 'pyright', 'lua_lsp', 'neocmake', 'rust_analyser'})
 
 
 
