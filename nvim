@@ -225,8 +225,8 @@ lua << EOF
 		client.server_capabilities.documentFormattingProvider = false
 		local map = vim.keymap.set
 		local bufopts = {noremap = true, silent = true, buffer=bufnr}
-		--map('n', 'gD', vim.lsp.buf.declaration, bufopts)
-    --map('n', 'gd', vim.lsp.buf.definition, bufopts)
+		map('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    map('n', 'gd', vim.lsp.buf.definition, bufopts)
 	end
 
 	vim.lsp.config('clangd', {
@@ -277,11 +277,11 @@ lua << EOF
 				},
 			},
 		})
-	vim.lsp.config('rust_analyser', {
+	vim.lsp.config('omnisharp', {
 		on_attach = on_attach,
 		capabilities = capabilities,
 		})
-	vim.lsp.enable({'clangd', 'eslint', 'html', 'pyright', 'lua_lsp', 'neocmake', 'rust_analyser'})
+	vim.lsp.enable({'clangd', 'eslint', 'html', 'pyright', 'lua_lsp', 'neocmake', 'omnisharp'})
 
 
 
