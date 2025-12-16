@@ -87,6 +87,7 @@ Plug 'daltonmenezes/aura-theme', { 'rtp': 'packages/neovim' }
 
 Plug 'https://github.com/lewis6991/gitsigns.nvim.git'
 
+Plug 'numToStr/Comment.nvim'
 
 call plug#end()
 
@@ -411,6 +412,7 @@ require'noice'.setup({
 
 require("gitsigns").setup()
 
+require('Comment').setup()
 
 EOF
 
