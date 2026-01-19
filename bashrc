@@ -1,3 +1,6 @@
+towin='/mnt/c/Users/HP\ WORLD/dev/fromArch'
+
+
 white=$(tput sgr0);
 bule=$(tput setaf 222);
 usrblue=$(tput setaf 33);
@@ -62,9 +65,9 @@ alias sql='psql -U rom -d test'
 alias smp='GDK_SCALE=2 java -jar ~/dev/mp8085/8085Compiler.jar'
 alias mp='java -jar ~/dev/kollege/mp8085/8085Compiler.jar'
 alias yt='youtube-tui'
-alias kaz='cd ~/dev/web/kazilen-backend/djangoproj && source .env/bin/activate'
+alias kaz='cd ~/dev/web/kazilen-backend/djangoproj && source ../venv/bin/activate'
 alias yc='yazi'
-
+alias min='minio server ~/minio-data --address ":8888" --console-address ":8889"'
 
 bak (){
 	main="$PWD"
@@ -155,5 +158,20 @@ gac (){
 	git add .
 	git commit -m "${cmsg}"
 }
+export -f gac;
+
+dotrun (){
+	echo "running windows dotnet 8 runtime"
+	powershell.exe -Command "dotnet run"
+}
+
+runwin (){
+	local basedir=$(basename "$PWD")
+	echo "/bin/Release/net8.0/win-x64/publish/${basedir}.exe is going to run"
+	echo "Running ..."
+	powershell.exe "./bin/Release/net8.0/win-x64/publish/${basedir}.exe"
+}
+export -f runwin;
+
 
 . "$HOME/.local/bin/env"
