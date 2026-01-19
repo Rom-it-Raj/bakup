@@ -1,26 +1,27 @@
-:set autoindent
-:set tabstop=2
-:set shiftwidth=2
-:set smarttab
-:set softtabstop=2
-:set mouse=a
-:set foldcolumn=1
-:set foldmethod=indent
-:set foldlevel=99
-:set rnu
-:set nu
-:set termguicolors
+set autoindent
+set tabstop=2
+set shiftwidth=2
+set smarttab
+set softtabstop=2
+set mouse=a
+set foldcolumn=1
+set foldmethod=indent
+set foldlevel=99
+set rnu
+set nu
+set termguicolors
 
-
+" --- PLUGINS ---
 call plug#begin()
+Plug 'tpope/vim-surround'
+Plug 'preservim/nerdtree'
+Plug 'tpope/vim-commentary'
+Plug 'vim-airline/vim-airline'
+Plug 'lifepillar/pgsql.vim'
+Plug 'ap/vim-css-color'
+Plug 'rafi/awesome-vim-colorschemes'
 
-Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
-Plug 'https://github.com/preservim/nerdtree' " NerdTree
-Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
-Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'https://github.com/lifepillar/pgsql.vim' " PSQL Pluging needs :SQLSetType pgsql.vim
-Plug 'https://github.com/ap/vim-css-color' " CSS Color Preview
-Plug 'https://github.com/rafi/awesome-vim-colorschemes' " Retro Scheme
+" LSP & Autocomplete
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
@@ -29,109 +30,63 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
-" follow latest release and install jsregexp.
 Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp'}
-
 Plug 'rafamadriz/friendly-snippets'
-
-Plug 'm4xshen/autoclose.nvim'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 
+" UI & Icons
 Plug 'ryanoasis/vim-devicons'
-"Plug 'nvim-tree/nvim-web-devicons'
-
+Plug 'm4xshen/autoclose.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
-" or                                , { 'branch': '0.1.x' }
-
-
-Plug 'loctvl842/monokai-pro.nvim'
-Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'https://github.com/folke/tokyonight.nvim.git'
-
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
-Plug 'https://github.com/rebelot/kanagawa.nvim.git'
-Plug 'zaldih/themery.nvim'
-
-Plug 'https://github.com/enricobacis/vim-airline-clock.git'
-
-Plug 'https://github.com/folke/trouble.nvim.git'
-
-Plug 'https://github.com/lukas-reineke/indent-blankline.nvim.git'
-Plug 'https://github.com/scottmckendry/cyberdream.nvim.git'
-
-Plug 'https://github.com/tiagovla/tokyodark.nvim.git'
-Plug 'vim-airline/vim-airline-themes'
-
-Plug 'https://github.com/lewis6991/gitsigns.nvim.git'
-Plug 'https://github.com/jmbuhr/otter.nvim.git'
-
-
-Plug 'https://github.com/norcalli/nvim-colorizer.lua.git'
-
-
-Plug 'kevinhwang91/nvim-ufo'
-Plug 'kevinhwang91/promise-async'
-Plug 'https://github.com/nvimtools/none-ls.nvim.git'
-Plug 'https://github.com/RaafatTurki/hex.nvim.git'
-
+Plug 'rcarriga/nvim-notify'
 Plug 'folke/noice.nvim'
 Plug 'MunifTanjim/nui.nvim'
-Plug 'rcarriga/nvim-notify'
 
-
+" Themes
+Plug 'loctvl842/monokai-pro.nvim'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'folke/tokyonight.nvim'
+Plug 'rebelot/kanagawa.nvim'
+Plug 'tiagovla/tokyodark.nvim'
 Plug 'daltonmenezes/aura-theme', { 'rtp': 'packages/neovim' }
+Plug 'zaldih/themery.nvim'
 
-Plug 'https://github.com/lewis6991/gitsigns.nvim.git'
-
+" Git & Tools
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'nvimtools/none-ls.nvim'
+Plug 'RaafatTurki/hex.nvim'
+Plug 'kevinhwang91/nvim-ufo'
+Plug 'kevinhwang91/promise-async'
 Plug 'numToStr/Comment.nvim'
+Plug 'norcalli/nvim-colorizer.lua'
 
 call plug#end()
+" --- END PLUGINS ---
 
 set encoding=UTF-8
+set completeopt-=preview 
+colorscheme purify
 
-
-:set completeopt-=preview "For No Previews
-
-:colorscheme purify
-
+" --- Global Vars ---
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme="jellybeans"
-
-" --- Just Some Notes ---
-" :PlugClean :PlugInstall :UpdateRemotePlugins
-
-" air-line
 let g:airline_powerline_fonts = 1
 
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-" airline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-
+" --- Mappings ---
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-q> :Themery<CR>
-
 nnoremap <C-j> :bn <CR>
 nnoremap <C-k> :bp <CR>
-
 nnoremap <C-\> :ToggleTerm size=10 direction=horizontal <CR>
 nnoremap <C-]> :ToggleTerm direction=float <CR>
-
 nnoremap <C-f> <cmd>Telescope find_files<cr>
 nnoremap <C-g> <cmd>Telescope live_grep<cr>
 nnoremap <C-b> <cmd>Telescope buffers<cr>
@@ -139,281 +94,191 @@ nnoremap <C-h> <cmd>Telescope help_tags<cr>
 nnoremap <C-x> :HexToggle <CR>
 nnoremap <C-m> <cmd>lua vim.lsp.buf.format() <CR>
 
-
-
+" --- LUA CONFIG ---
 lua << EOF
-	require("mason").setup()
-	require("mason-lspconfig").setup()
-	
-	  -- Set up nvim-cmp.
-  local cmp = require'cmp'
+    require("mason").setup()
+    require("mason-lspconfig").setup()
 
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-      end,
-    },
-    window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-z>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-d>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    }),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'vsnip' }, -- For vsnip users.
-      { name = 'luasnip' }, -- For luasnip users.
-    }, {
-      { name = 'buffer' },
+    -- 1. CMP (Autocomplete) Setup
+    local cmp = require'cmp'
+    cmp.setup({
+        snippet = {
+            expand = function(args)
+                vim.fn["vsnip#anonymous"](args.body) 
+            end,
+        },
+        window = {
+            completion = cmp.config.window.bordered(),
+            documentation = cmp.config.window.bordered(),
+        },
+        mapping = cmp.mapping.preset.insert({
+            ['<C-z>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-d>'] = cmp.mapping.scroll_docs(4),
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<C-e>'] = cmp.mapping.abort(),
+            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = cmp.config.sources({
+            { name = 'nvim_lsp' },
+            { name = 'vsnip' }, 
+            { name = 'luasnip' }, 
+        }, {
+            { name = 'buffer' },
+        })
     })
-  })
 
-	-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-	cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
+    cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+            { name = 'path' }
+        }, {
+            { name = 'cmdline' }
+        }),
+        matching = { disallow_symbol_nonprefix_matching = false }
+    })
+
+    -- 2. LSP Setup
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
+    local on_attach = function(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false
+        local map = vim.keymap.set
+        local bufopts = {noremap = true, silent = true, buffer=bufnr}
+        map('n', 'gD', vim.lsp.buf.declaration, bufopts)
+        map('n', 'gd', vim.lsp.buf.definition, bufopts)
+    end
+
+    local lspconfig = require('lspconfig')
+
+    -- C++
+    lspconfig.clangd.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+    })
+
+    -- Python
+    local projectRoot = vim.loop.cwd()
+    lspconfig.pyright.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            python = {
+                venvPath = projectRoot,
+                venv = ".env",
+            }
+        }
+    })
+
+    -- HTML
+    lspconfig.html.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { "html", "js" },
+    })
+    
+    -- Eslint (Previously in your enable list)
+    lspconfig.eslint.setup({
+         on_attach = on_attach,
+         capabilities = capabilities,
+    })
+
+    require("luasnip.loaders.from_vscode").lazy_load()
+
+    -- 3. Treesitter (Protected Call to fix your crash)
+    local status, ts = pcall(require, "nvim-treesitter.configs")
+    if status then
+        ts.setup {
+            ensure_installed = {'c', 'cpp', 'lua', 'vim', 'python'},
+            highlight = { enable = true }
+        }
+    else
+        print("Treesitter not found. Please run :PlugInstall")
+    end
+
+    require("autoclose").setup({
+        keys = {
+            ["("] = { escape = true, close = true, pair = "()", disabled_filetypes = {} },
+            ["{"] = { escape = true, close = true, pair = "{}", disabled_filetypes = {} },
+        },
+    })
+    
+    require('telescope').setup{}
+    require("toggleterm").setup()
+    
+    require("themery").setup({
+        themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "tokyodark", "aura-dark"},
+        livePreview = true,
+    })
+
+    -- Indent Blankline
+    local highlight = {
+        "RainbowRed", "RainbowYellow", "RainbowBlue", "RainbowOrange", "RainbowGreen", "RainbowViolet", "RainbowCyan",
     }
-  })
+    local hooks = require "ibl.hooks"
+    hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+        vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+        vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+        vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+        vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+        vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+        vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+    end)
+    require("ibl").setup { indent = { highlight = highlight } }
 
+    -- Diagnostics
+    vim.diagnostic.config {
+        underline = true,
+        virtual_text = false, -- Disabled virtual text to reduce clutter
+        signs = true,
+        severity_sort = true,
+        update_in_insert = false,
+    }
 
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    }),
-    matching = { disallow_symbol_nonprefix_matching = false }
-  })
+    require('colorizer').setup()
+    require('ufo').setup({
+        provider_selector = function(bufnr, filetype, buftype)
+            return {'treesitter', 'indent'}
+        end
+    })
 
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  --require('lspconfig')['clangd'].setup {
-  --  capabilities = capabilities
-  --}
-	--	require('lspconfig')['rust-analyser'].setup{
-	--	capabilities=capabilities
-	--}
-	--require('lspconfig')['pyright'].setup{
-	--capabilities=capabilities
-	--}
-	--require('lspconfig')['neocmake'].setup({
-	--	capabilities = capabilities
-	--})
-	--require('lspconfig')['html-lsp'].setup({
-	--	settings={
-	--		html={
-	--			fileAssociations={
-	--				"*.html",
-	--				"*.js",
-	--			},
-	--		}
-	--	},
-	--	filetypes={
-	--		"html",
-	--		"js",
-	--	},
-	--})
-	local on_attach = function(client, bufnr)
-		client.server_capabilities.documentFormattingProvider = false
-		local map = vim.keymap.set
-		local bufopts = {noremap = true, silent = true, buffer=bufnr}
-		map('n', 'gD', vim.lsp.buf.declaration, bufopts)
-    map('n', 'gd', vim.lsp.buf.definition, bufopts)
-	end
+    -- Null-LS (Formatting)
+    local null_ls = require('null-ls')
+    null_ls.setup({
+        sources = {
+            null_ls.builtins.formatting.prettierd.with({
+                filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "css" }
+            }),
+            null_ls.builtins.formatting.black.with({
+                filetypes = { "python" }
+            }),
+            null_ls.builtins.formatting.clang_format.with({
+                filetypes = { "cpp", "c" }
+            }),
+        }
+    })
 
-	vim.lsp.config('clangd', {
-		on_attach = on_attach,
-		capabilities = capabilities,
-		})
+    require'hex'.setup()
 
-	local projectRoot = vim.loop.cwd()
-	local venvName = ".env"
-	local envPath = projectRoot ..'/'..venvName
-	local pythonPath = envPath..'/bin/python'
+    -- Noice & Notify
+    require'notify'.setup({ background_colour = "#010101" })
+    require'noice'.setup({
+        cmdline = { enabled=true, view="cmdline_popup" },
+        messages={ enabled=true, view='notify', view_error='notify', view_warn='notify' }
+    })
 
-	vim.lsp.config('pyright', {
-		on_attach = on_attach,
-		capabilities = capabilities,
-		settings = {
-			python = {
-				venvPath = projectRoot,
-				venv = venvName
-				}
-			}
-		})
-
-	vim.lsp.config('html', {
-		on_attach = on_attach,
-		capabilities = capabilities,
-		settings={
-			html={
-				fileAssociations={
-					"*.html",
-					"*.js",
-				},
-			}
-		},
-		filetypes={
-			"html",
-			"js",
-		},
-	})
-	vim.lsp.config('lua_lsp', {
-		on_attach = on_attach,
-		capabilities = capabilities,
-		settings = {
-			Lua = {
-				workspace={
-				userFiletypes = {'vim', 'lua'},
-				},
-				},
-			},
-		})
-	vim.lsp.config('omnisharp', {
-		on_attach = on_attach,
-		capabilities = capabilities,
-		})
-	vim.lsp.enable({'clangd', 'eslint', 'html', 'pyright', 'lua_lsp', 'neocmake', 'omnisharp'})
-
-
-
-	require("luasnip.loaders.from_vscode").lazy_load()
-
-
-	require("autoclose").setup({
-   keys = {
-      ["("] = { escape = true, close = true, pair = "()", disabled_filetypes = {} },
-			["{"] = { escape = true, close = true, pair = "{}", disabled_filetypes = {} },
-   },
-})
-
-	require'nvim-treesitter.configs'.setup {
-		ensure_installed = {'c', 'cpp', 'lua', 'vim', 'python'}, 
-		highlight={ 
-			enable=true,
-		}
-	}
-	require('telescope').setup{}
-	
-	require("toggleterm").setup()
-
-
-	-- Minimal config
-	require("themery").setup({
-		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "cyberdream", "tokyodark", "aura-dark"}, -- Your list of installed colorschemes.
-	 livePreview = true, -- Apply theme while picking. Default to true.
-	})
-	
-
-	local highlight = {
-    "RainbowRed",
-    "RainbowYellow",
-    "RainbowBlue",
-    "RainbowOrange",
-    "RainbowGreen",
-    "RainbowViolet",
-    "RainbowCyan",
-	}
-
-local hooks = require "ibl.hooks"
-hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-    vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-    vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-    vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-    vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-    vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-    vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-    vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-end)
-
-require("ibl").setup { indent = { highlight = highlight } }
-
-require('cyberdream').setup()
-
-vim.diagnostic.config {
-	underline = true,
-	virtual_text = {
-		prefix = "",
-		severity = nil,
-		source = "if_many",
-		format = nil,
-	},
-	signs = true,
-	severity_sort = true,
-	update_in_insert = false,
-}
-
-require('gitsigns').setup()
-
-require('colorizer').setup()
-
-require('ufo').setup({
-  provider_selector = function(bufnr, filetype, buftype)
-		return {'treesitter', 'indent'}
-  end
-})
-
-
-local null_ls = require('null-ls')
-null_ls.setup({
-sources = {
-	null_ls.builtins.formatting.prettierd.with({
-		filetypes = {
-			"javascript", 
-			"javascriptreact",
-			"typescript",
-			"typescriptreact",
-			"css",
-			}
-	}),
-	null_ls.builtins.formatting.black.with({
-		filetypes = {
-			"python",
-			}
-	}),
-	null_ls.builtins.formatting.clang_format.with({
-		filetypes = {
-			"cpp, c",
-			}
-	}),
-	} 
-})
-
-require'hex'.setup()
-
-require('noice').setup()
-
-require'notify'.setup({
-	background_colour = "#010101",
-})
-
-require'noice'.setup({
-	cmdline	= {
-		enabled=true,
-		view="cmdline_popup",
-		},
-	messages={
-		enabled=true,
-  	view='notify',
-		view_error='notify',
-		view_warn='notify',
-	}
-})
-
-
-
-require("gitsigns").setup()
-
-require('Comment').setup()
-
+    require("gitsigns").setup()
+    require('Comment').setup()
 EOF
 
+" Autoformat on save
 autocmd BufWritePost *.v lua vim.lsp.buf.format({ async = false })
+" Disable the broken fancy symbols and use plain text separators
+let g:airline_powerline_fonts = 0
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+" Disable the orange whitespace warning seen in your screenshot
+let g:airline#extensions#whitespace#enabled = 0
+
+" Force the status line to redraw more frequently
+set laststatus=2
