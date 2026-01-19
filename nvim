@@ -11,17 +11,19 @@ set rnu
 set nu
 set termguicolors
 
+lua vim.g.deprecation_warnings = false
+
 " --- PLUGINS ---
 call plug#begin()
 Plug 'tpope/vim-surround'
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'lifepillar/pgsql.vim'
 Plug 'ap/vim-css-color'
 Plug 'rafi/awesome-vim-colorschemes'
 
-" LSP & Autocomplete
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
@@ -35,7 +37,6 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 
-" UI & Icons
 Plug 'ryanoasis/vim-devicons'
 Plug 'm4xshen/autoclose.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -45,7 +46,6 @@ Plug 'rcarriga/nvim-notify'
 Plug 'folke/noice.nvim'
 Plug 'MunifTanjim/nui.nvim'
 
-" Themes
 Plug 'loctvl842/monokai-pro.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'folke/tokyonight.nvim'
@@ -54,7 +54,6 @@ Plug 'tiagovla/tokyodark.nvim'
 Plug 'daltonmenezes/aura-theme', { 'rtp': 'packages/neovim' }
 Plug 'zaldih/themery.nvim'
 
-" Git & Tools
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -76,7 +75,7 @@ colorscheme purify
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme="jellybeans"
+"let g:airline_theme="jellybeans"
 let g:airline_powerline_fonts = 1
 
 " --- Mappings ---
@@ -149,34 +148,31 @@ lua << EOF
 
     local lspconfig = require('lspconfig')
 
-    -- C++
-    lspconfig.clangd.setup({
-        on_attach = on_attach,
+		vim.lsp.config('clangd', {
+				 on_attach = on_attach,
         capabilities = capabilities,
-    })
 
-    -- Python
+			})
+    
     local projectRoot = vim.loop.cwd()
-    lspconfig.pyright.setup({
+    vim.lsp.config('pyright',{
         on_attach = on_attach,
-        capabilities = capabilities,
-        settings = {
-            python = {
-                venvPath = projectRoot,
-                venv = ".env",
-            }
-        }
+       capabilities = capabilities,
+       settings = {
+           python = {
+               venvPath = projectRoot,
+               venv = ".env",
+           }
+       }
     })
 
-    -- HTML
-    lspconfig.html.setup({
+    vim.lsp.config('html',{
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = { "html", "js" },
     })
     
-    -- Eslint (Previously in your enable list)
-    lspconfig.eslint.setup({
+    vim.lsp.config('eslint',{
          on_attach = on_attach,
          capabilities = capabilities,
     })
@@ -187,11 +183,9 @@ lua << EOF
     local status, ts = pcall(require, "nvim-treesitter.configs")
     if status then
         ts.setup {
-            ensure_installed = {'c', 'cpp', 'lua', 'vim', 'python'},
+            ensure_installed = {'c', 'cpp', 'python', 'js', 'html'},
             highlight = { enable = true }
         }
-    else
-        print("Treesitter not found. Please run :PlugInstall")
     end
 
     require("autoclose").setup({
@@ -226,14 +220,18 @@ lua << EOF
     require("ibl").setup { indent = { highlight = highlight } }
 
     -- Diagnostics
-    vim.diagnostic.config {
-        underline = true,
-        virtual_text = false, -- Disabled virtual text to reduce clutter
-        signs = true,
-        severity_sort = true,
-        update_in_insert = false,
-    }
-
+    vim.diagnostic.config({
+			virtual_text = {
+			spacing = 4,
+			prefix = '●', -- Or any character you like
+			source = "if_many", -- Shows which tool (LSP/Linter) found the error
+		},
+			severity_sort = true,
+			float = {
+				border = 'rounded',
+				source = 'always',
+			},
+		})
     require('colorizer').setup()
     require('ufo').setup({
         provider_selector = function(bufnr, filetype, buftype)
@@ -268,17 +266,30 @@ lua << EOF
 
     require("gitsigns").setup()
     require('Comment').setup()
+		-- Suppress specific deprecation messages
 EOF
 
-" Autoformat on save
 autocmd BufWritePost *.v lua vim.lsp.buf.format({ async = false })
-" Disable the broken fancy symbols and use plain text separators
 let g:airline_powerline_fonts = 0
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 
-" Disable the orange whitespace warning seen in your screenshot
 let g:airline#extensions#whitespace#enabled = 0
 
-" Force the status line to redraw more frequently
 set laststatus=2
+if executable('clip.exe')
+    let g:clipboard = {
+          \   'name': 'WslClipboard',
+          \   'copy': {
+          \      '+': 'clip.exe',
+          \      '*': 'clip.exe',
+          \    },
+          \   'paste': {
+          \      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+          \      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+          \   },
+          \   'cache_enabled': 0,
+          \ }
+endif
+
+set clipboard+=unnamedplus
