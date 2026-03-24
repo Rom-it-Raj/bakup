@@ -12,7 +12,6 @@ set nu
 set termguicolors
 
 lua vim.g.deprecation_warnings = false
-
 " --- PLUGINS ---
 call plug#begin()
 Plug 'tpope/vim-surround'
@@ -24,6 +23,9 @@ Plug 'lifepillar/pgsql.vim'
 Plug 'ap/vim-css-color'
 Plug 'rafi/awesome-vim-colorschemes'
 
+Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'rcarriga/nvim-dap-ui'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
@@ -267,6 +269,18 @@ lua << EOF
     require("gitsigns").setup()
     require('Comment').setup()
 		-- Suppress specific deprecation messages
+		vim.g.clipboard = {
+    name = 'win32yank-wsl',
+    copy = {
+        ["+"] = 'win32yank.exe -i --crlf',
+        ["*"] = 'win32yank.exe -i --crlf',
+    },
+    paste = {
+        ["+"] = 'win32yank.exe -o --lf',
+        ["*"] = 'win32yank.exe -o --lf',
+    },
+    cache_enabled = 0,
+}
 EOF
 
 autocmd BufWritePost *.v lua vim.lsp.buf.format({ async = false })
@@ -277,19 +291,3 @@ let g:airline_right_sep = ''
 let g:airline#extensions#whitespace#enabled = 0
 
 set laststatus=2
-if executable('clip.exe')
-    let g:clipboard = {
-          \   'name': 'WslClipboard',
-          \   'copy': {
-          \      '+': 'clip.exe',
-          \      '*': 'clip.exe',
-          \    },
-          \   'paste': {
-          \      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-          \      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-          \   },
-          \   'cache_enabled': 0,
-          \ }
-endif
-
-set clipboard+=unnamedplus

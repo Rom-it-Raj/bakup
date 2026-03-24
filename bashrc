@@ -62,12 +62,11 @@ alias web2='torbrowser-launcher'
 alias down='wsl.exe --shutdown'
 alias stop='sudo btop'
 alias sql='psql -U rom -d test'
-alias smp='GDK_SCALE=2 java -jar ~/dev/mp8085/8085Compiler.jar'
-alias mp='java -jar ~/dev/kollege/mp8085/8085Compiler.jar'
 alias yt='youtube-tui'
 alias kaz='cd ~/dev/web/kazilen-backend/djangoproj && source ../venv/bin/activate'
 alias yc='yazi'
 alias min='minio server ~/minio-data --address ":8888" --console-address ":8889"'
+alias tor='sudo systemctl restart tor'
 
 bak (){
 	main="$PWD"
