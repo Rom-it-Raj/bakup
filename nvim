@@ -10,6 +10,7 @@ set foldlevel=99
 set rnu
 set nu
 set termguicolors
+set clipboard+=unamedplus
 
 lua vim.g.deprecation_warnings = false
 " --- PLUGINS ---
@@ -66,6 +67,8 @@ Plug 'kevinhwang91/promise-async'
 Plug 'numToStr/Comment.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
 
+
+
 call plug#end()
 " --- END PLUGINS ---
 
@@ -97,190 +100,179 @@ nnoremap <C-m> <cmd>lua vim.lsp.buf.format() <CR>
 
 " --- LUA CONFIG ---
 lua << EOF
-    require("mason").setup()
-    require("mason-lspconfig").setup()
+require("mason").setup()
+require("mason-lspconfig").setup()
 
-    -- 1. CMP (Autocomplete) Setup
-    local cmp = require'cmp'
-    cmp.setup({
-        snippet = {
-            expand = function(args)
-                vim.fn["vsnip#anonymous"](args.body) 
-            end,
-        },
-        window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered(),
-        },
-        mapping = cmp.mapping.preset.insert({
-            ['<C-z>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-d>'] = cmp.mapping.scroll_docs(4),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<C-e>'] = cmp.mapping.abort(),
-            ['<CR>'] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = cmp.config.sources({
-            { name = 'nvim_lsp' },
-            { name = 'vsnip' }, 
-            { name = 'luasnip' }, 
-        }, {
-            { name = 'buffer' },
-        })
-    })
+-- 1. CMP (Autocomplete) Setup
+local cmp = require'cmp'
+cmp.setup({
+	snippet = {
+		expand = function(args)
+		vim.fn["vsnip#anonymous"](args.body) 
+		end,
+	},
+	window = {
+		completion = cmp.config.window.bordered(),
+		documentation = cmp.config.window.bordered(),
+	},
+	mapping = cmp.mapping.preset.insert({
+		['<C-z>'] = cmp.mapping.scroll_docs(-4),
+		['<C-d>'] = cmp.mapping.scroll_docs(4),
+		['<C-Space>'] = cmp.mapping.complete(),
+		['<C-e>'] = cmp.mapping.abort(),
+		['<CR>'] = cmp.mapping.confirm({ select = true }),
+	}),
+	sources = cmp.config.sources({
+		{ name = 'nvim_lsp', priority = 100},
+		{ name = 'vsnip', priority = 50 }, 
+		{ name = 'luasnip', priority = 20 }, 
+	}, {
+		{ name = 'buffer' },
+	})
+})
 
-    cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-            { name = 'path' }
-        }, {
-            { name = 'cmdline' }
-        }),
-        matching = { disallow_symbol_nonprefix_matching = false }
-    })
+cmp.setup.cmdline(':', {
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = cmp.config.sources({
+	{ name = 'path' }
+	}, {
+		{ name = 'cmdline' }
+	}),
+	matching = { disallow_symbol_nonprefix_matching = false }
+})
 
-    -- 2. LSP Setup
-    local capabilities = require('cmp_nvim_lsp').default_capabilities()
-    local on_attach = function(client, bufnr)
-        client.server_capabilities.documentFormattingProvider = false
-        local map = vim.keymap.set
-        local bufopts = {noremap = true, silent = true, buffer=bufnr}
-        map('n', 'gD', vim.lsp.buf.declaration, bufopts)
-        map('n', 'gd', vim.lsp.buf.definition, bufopts)
-    end
+-- 2. LSP Setup
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local on_attach = function(client, bufnr)
+client.server_capabilities.documentFormattingProvider = false
+local map = vim.keymap.set
+local bufopts = {noremap = true, silent = true, buffer=bufnr}
+map('n', 'gD', vim.lsp.buf.declaration, bufopts)
+map('n', 'gd', vim.lsp.buf.definition, bufopts)
+end
 
-    local lspconfig = require('lspconfig')
+local lspconfig = require('lspconfig')
 
-		vim.lsp.config('clangd', {
-				 on_attach = on_attach,
-        capabilities = capabilities,
+vim.lsp.config('clangd', {
+	on_attach = on_attach,
+	capabilities = capabilities,
 
-			})
-    
-    local projectRoot = vim.loop.cwd()
-    vim.lsp.config('pyright',{
-        on_attach = on_attach,
-       capabilities = capabilities,
-       settings = {
-           python = {
-               venvPath = projectRoot,
-               venv = ".env",
-           }
-       }
-    })
+})
 
-    vim.lsp.config('html',{
-        on_attach = on_attach,
-        capabilities = capabilities,
-        filetypes = { "html", "js" },
-    })
-    
-    vim.lsp.config('eslint',{
-         on_attach = on_attach,
-         capabilities = capabilities,
-    })
+local projectRoot = vim.loop.cwd()
+vim.lsp.config('pyright',{
+on_attach = on_attach,
+capabilities = capabilities,
+settings = {
+	python = {
+		venvPath = projectRoot,
+		venv = ".env",
+	}
+	}
+})
 
-    require("luasnip.loaders.from_vscode").lazy_load()
+	vim.lsp.config('html',{
+		on_attach = on_attach,
+		capabilities = capabilities,
+		filetypes = { "html", "js" },
+	})
 
-    -- 3. Treesitter (Protected Call to fix your crash)
-    local status, ts = pcall(require, "nvim-treesitter.configs")
-    if status then
-        ts.setup {
-            ensure_installed = {'c', 'cpp', 'python', 'js', 'html'},
-            highlight = { enable = true }
-        }
-    end
+	vim.lsp.config('eslint',{
+	on_attach = on_attach,
+	capabilities = capabilities,
+	})
 
-    require("autoclose").setup({
-        keys = {
-            ["("] = { escape = true, close = true, pair = "()", disabled_filetypes = {} },
-            ["{"] = { escape = true, close = true, pair = "{}", disabled_filetypes = {} },
-        },
-    })
-    
-    require('telescope').setup{}
-    require("toggleterm").setup()
-    
-    require("themery").setup({
-        themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "tokyodark", "aura-dark"},
-        livePreview = true,
-    })
+	require("luasnip.loaders.from_vscode").lazy_load()
 
-    -- Indent Blankline
-    local highlight = {
-        "RainbowRed", "RainbowYellow", "RainbowBlue", "RainbowOrange", "RainbowGreen", "RainbowViolet", "RainbowCyan",
-    }
-    local hooks = require "ibl.hooks"
-    hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-        vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-        vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-        vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-        vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-        vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-        vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-    end)
-    require("ibl").setup { indent = { highlight = highlight } }
+-- 3. Treesitter (Protected Call to fix your crash)
+local status, ts = pcall(require, "nvim-treesitter.configs")
+if status then
+	ts.setup {
+		ensure_installed = {'c', 'cpp', 'python', 'js', 'html', 'yaml', 'markdown', 'markdown_inline'},
+		highlight = { enable = true }
+	}
+	end
 
-    -- Diagnostics
-    vim.diagnostic.config({
-			virtual_text = {
+	require("autoclose").setup({
+	keys = {
+		["("] = { escape = true, close = true, pair = "()", disabled_filetypes = {} },
+		["{"] = { escape = true, close = true, pair = "{}", disabled_filetypes = {} },
+	},
+	})
+
+	require('telescope').setup{}
+	require("toggleterm").setup()
+
+	require("themery").setup({
+		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "tokyodark", "aura-dark"},
+		livePreview = true,
+	})
+
+	-- Indent Blankline
+	local highlight = {
+		"RainbowRed", "RainbowYellow", "RainbowBlue", "RainbowOrange", "RainbowGreen", "RainbowViolet", "RainbowCyan",
+	}
+	local hooks = require "ibl.hooks"
+	hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+	vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+	vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+	vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+	vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+	vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+	vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+	vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+	end)
+	require("ibl").setup { indent = { highlight = highlight } }
+
+	-- Diagnostics
+	vim.diagnostic.config({
+		virtual_text = {
 			spacing = 4,
 			prefix = '●', -- Or any character you like
 			source = "if_many", -- Shows which tool (LSP/Linter) found the error
 		},
-			severity_sort = true,
+		severity_sort = true,
 			float = {
 				border = 'rounded',
 				source = 'always',
 			},
-		})
-    require('colorizer').setup()
-    require('ufo').setup({
-        provider_selector = function(bufnr, filetype, buftype)
-            return {'treesitter', 'indent'}
-        end
-    })
+	})
+	require('colorizer').setup()
+	require('ufo').setup({
+		provider_selector = function(bufnr, filetype, buftype)
+		return {'treesitter', 'indent'}
+		end
+	})
 
-    -- Null-LS (Formatting)
-    local null_ls = require('null-ls')
-    null_ls.setup({
-        sources = {
-            null_ls.builtins.formatting.prettierd.with({
-                filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "css" }
-            }),
-            null_ls.builtins.formatting.black.with({
-                filetypes = { "python" }
-            }),
-            null_ls.builtins.formatting.clang_format.with({
-                filetypes = { "cpp", "c" }
-            }),
-        }
-    })
+	-- Null-LS (Formatting)
+	local null_ls = require('null-ls')
+	null_ls.setup({
+	sources = {
+		null_ls.builtins.formatting.prettierd.with({
+		filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "css" }
+		}),
+		null_ls.builtins.formatting.black.with({
+		filetypes = { "python" }
+		}),
+		null_ls.builtins.formatting.clang_format.with({
+		filetypes = { "cpp", "c" }
+		}),
+	}
+	})
 
-    require'hex'.setup()
+	require'hex'.setup()
 
-    -- Noice & Notify
-    require'notify'.setup({ background_colour = "#010101" })
-    require'noice'.setup({
-        cmdline = { enabled=true, view="cmdline_popup" },
-        messages={ enabled=true, view='notify', view_error='notify', view_warn='notify' }
-    })
+	-- Noice & Notify
+	require'notify'.setup({ background_colour = "#010101" })
+	require'noice'.setup({
+	cmdline = { enabled=true, view="cmdline_popup" },
+	messages={ enabled=true, view='notify', view_error='notify', view_warn='notify' }
+	})
 
-    require("gitsigns").setup()
-    require('Comment').setup()
-		-- Suppress specific deprecation messages
-		vim.g.clipboard = {
-    name = 'win32yank-wsl',
-    copy = {
-        ["+"] = 'win32yank.exe -i --crlf',
-        ["*"] = 'win32yank.exe -i --crlf',
-    },
-    paste = {
-        ["+"] = 'win32yank.exe -o --lf',
-        ["*"] = 'win32yank.exe -o --lf',
-    },
-    cache_enabled = 0,
-}
+	require('gitsigns').setup()
+	require('Comment').setup()
+	-- Suppress specific deprecation messages
+
 EOF
 
 autocmd BufWritePost *.v lua vim.lsp.buf.format({ async = false })

@@ -1,5 +1,3 @@
-towin='/mnt/c/Users/HP\ WORLD/dev/fromArch'
-
 
 white=$(tput sgr0);
 bule=$(tput setaf 222);
@@ -57,16 +55,14 @@ alias grep='grep --color=auto'
 alias ll='lsd -FXlah --color=auto'
 alias la='ls -a'
 alias yayc='yay -Rc $(yay -Qtdq)'
-alias web='explorer.exe "C:\Program Files\Zen Browser\zen.exe"'
-alias web2='torbrowser-launcher'
-alias down='wsl.exe --shutdown'
-alias stop='sudo btop'
+alias btop='btop --force-utf'
+alias stop='sudo btop --force-utf'
 alias sql='psql -U rom -d test'
 alias yt='youtube-tui'
 alias kaz='cd ~/dev/web/kazilen-backend/djangoproj && source ../venv/bin/activate'
 alias yc='yazi'
 alias min='minio server ~/minio-data --address ":8888" --console-address ":8889"'
-alias tor='sudo systemctl restart tor'
+alias aiser='llama-server -m ~/.llm_models/model1/blobs/mod.gguf --port 8012 -c 3072'
 
 bak (){
 	main="$PWD"
@@ -147,7 +143,7 @@ export -f rr;
 
 gac (){
 	local Ctime=$(date)
-	local dmsg="!Automated message! Did work at ${Ctime}"
+	local dmsg="auto@${Ctime}"
 	if [ -n "$1" ]; then
 		local cmsg="$1"
 	else
@@ -159,18 +155,3 @@ gac (){
 }
 export -f gac;
 
-dotrun (){
-	echo "running windows dotnet 8 runtime"
-	powershell.exe -Command "dotnet run"
-}
-
-runwin (){
-	local basedir=$(basename "$PWD")
-	echo "/bin/Release/net8.0/win-x64/publish/${basedir}.exe is going to run"
-	echo "Running ..."
-	powershell.exe "./bin/Release/net8.0/win-x64/publish/${basedir}.exe"
-}
-export -f runwin;
-
-
-. "$HOME/.local/bin/env"
