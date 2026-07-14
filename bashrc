@@ -62,11 +62,10 @@ alias yt='youtube-tui'
 alias kaz='cd ~/dev/web/kazilen-backend/djangoproj && source ../venv/bin/activate'
 alias yc='yazi'
 alias min='minio server ~/minio-data --address ":8888" --console-address ":8889"'
-alias aiser='llama-server -m ~/.llm_models/model1/blobs/mod.gguf --port 8012 -c 3072'
 
 bak (){
 	main="$PWD"
-	cp "$HOME/.bashrc" "$HOME//bakup/bashrc"
+	cp "$HOME/.bashrc" "$HOME/bakup/bashrc"
 	cp "$HOME/.config/nvim/init.vim" "$HOME/bakup/nvim"
 	cd "$HOME/bakup"
 	git add .
