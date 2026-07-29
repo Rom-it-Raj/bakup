@@ -154,3 +154,5 @@ gac (){
 }
 export -f gac;
 
+
+export STM32_PRG_PATH=/home/romit/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin
