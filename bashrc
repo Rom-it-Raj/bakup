@@ -54,14 +54,17 @@ alias ls='lsd --color=auto'
 alias grep='grep --color=auto'
 alias ll='lsd -FXlah --color=auto'
 alias la='ls -a'
-alias yayc='yay -Rc $(yay -Qtdq)'
+alias yayc='yay -Rnsc $(yay -Qtdq)'
 alias btop='btop --force-utf'
 alias stop='sudo btop --force-utf'
 alias sql='psql -U rom -d test'
 alias yt='youtube-tui'
 alias kaz='cd ~/dev/web/kazilen-backend/djangoproj && source ../venv/bin/activate'
+alias nkaz='cd /home/romit/dev/new_web/kazilen-backend/ && source /home/romit/dev/new_web/kazilen-backend/.venv/bin/activate'
 alias yc='yazi'
 alias min='minio server ~/minio-data --address ":8888" --console-address ":8889"'
+alias pio_run='pio run --target upload'
+alias pio_com='pio run -t compiledb'
 
 bak (){
 	main="$PWD"
@@ -123,7 +126,7 @@ r (){
 export -f r;
 
 del (){
-	yay -Rc $(yay -Qq | grep $1)
+	yay -Rnsc $(yay -Qq | grep $1)
 }
 export -f del;
 
@@ -156,3 +159,63 @@ export -f gac;
 
 
 export STM32_PRG_PATH=/home/romit/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin
+
+
+run_hdl (){
+	local file=$1
+	local base=${file%.*}
+	local test_b="${base}_tb.v"
+	local sim="${base}_sim"
+	local vcd="${base}.vcd"
+	echo "running verilog sim"
+	iverilog -o $sim $file $test_b
+	vvp $sim
+	echo " "
+	echo "=================================================="
+	echo " "
+	echo "opening gtkwave"
+	surfer $vcd
+}
+export -f run_hdl;
+
+hdl_make() {
+	local base=$1
+	local v_file="${base}.v"
+	local test_b="${base}_tb.v"
+	mkdir $base
+	cd $base
+	git init
+	cat<<EOF > "$v_file"
+module ${base}();
+
+endmodule
+EOF
+	
+cat<<EOF > "$test_b"
+\`timescale 1ns / 10ps
+
+module ${base}_tb;
+
+${base} uut();
+initial begin
+	\$dumpfile("${base}.vcd");
+	\$dumpvars(0, ${base}_tb);
+	\$finish;
+end
+endmodule
+EOF
+
+}
+export -f hdl_make;
+
+make_schem() {
+	local file=$1
+	local base=${file%.*}
+	yosys -p "read_verilog ${file} ; synth -auto-top ; abc -g gates ; write_json ${base}.json"
+	netlistsvg $base.json -o $base.svg
+	mkdir schematic
+	mv ${base}.json schematic/
+	mv $base.svg schematic/
+}
+export BUN_INSTALL="$HOME/.BUN"
+export PATH="$BUN_INSTALL/bin:$PATH"

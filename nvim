@@ -67,8 +67,7 @@ Plug 'kevinhwang91/promise-async'
 Plug 'numToStr/Comment.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
 
-
-
+Plug 'scottmckendry/cyberdream.nvim'
 call plug#end()
 " --- END PLUGINS ---
 
@@ -153,9 +152,18 @@ end
 
 local lspconfig = require('lspconfig')
 
+--lspconfig.verible.setup({
+--  cmd = { "verible-verilog-ls", "--rules_config_search" },
+--  filetypes = { "verilog", "systemverilog" },
+--  root_dir = function() return vim.fn.getcwd() end,
+--  single_file_support = true,
+--})
+
+
 vim.lsp.config('clangd', {
 	on_attach = on_attach,
 	capabilities = capabilities,
+	filetypes = {"c", "cpp", "objc", "objcpp", "cuda"},
 
 })
 
@@ -204,7 +212,7 @@ if status then
 	require("toggleterm").setup()
 
 	require("themery").setup({
-		themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "tokyodark", "aura-dark"},
+	themes = {"purify", "kanagawa", "monokai-pro", "kanagawa-dragon", "tokyodark", "aura-dark", "github", "catppuccin-latte", "monokai-pro-light", "cyberdream-light"},
 		livePreview = true,
 	})
 
@@ -272,6 +280,15 @@ if status then
 	require('gitsigns').setup()
 	require('Comment').setup()
 	-- Suppress specific deprecation messages
+
+vim.filetype.add({
+  extension = {
+    v = "verilog",
+    sv = "systemverilog",
+    vh = "verilog",
+    svh = "systemverilog",
+  },
+})
 
 EOF
 
