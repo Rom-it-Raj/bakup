@@ -152,12 +152,13 @@ end
 
 local lspconfig = require('lspconfig')
 
---lspconfig.verible.setup({
---  cmd = { "verible-verilog-ls", "--rules_config_search" },
---  filetypes = { "verilog", "systemverilog" },
---  root_dir = function() return vim.fn.getcwd() end,
---  single_file_support = true,
---})
+lspconfig.verible.setup({
+	on_attach = on_attach,
+  cmd = { "verible-verilog-ls", "--rules_config_search" },
+  filetypes = { "verilog", "systemverilog" },
+  root_dir = lspconfig.util.root_pattern("verible.filelist", ".git"),
+  single_file_support = false,
+})
 
 
 vim.lsp.config('clangd', {
@@ -289,6 +290,7 @@ vim.filetype.add({
     svh = "systemverilog",
   },
 })
+
 
 EOF
 

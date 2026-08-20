@@ -162,19 +162,35 @@ export STM32_PRG_PATH=/home/romit/STMicroelectronics/STM32Cube/STM32CubeProgramm
 
 
 run_hdl (){
-	local file=$1
+	local main_v=$1
+	local file="${1##*/}"
 	local base=${file%.*}
-	local test_b="${base}_tb.v"
-	local sim="${base}_sim"
-	local vcd="${base}.vcd"
+	local test_b="tb/${base}_tb.v"
 	echo "running verilog sim"
-	iverilog -o $sim $file $test_b
-	vvp $sim
+	echo ""
+	echo "select TestBench :"
+	select test_b in tb/*v; do
+		if [ -n "$test_b" ]; then
+			echo "Selected: $test_b"
+			break
+		else 
+			echo "something wrong"
+		fi
+	done
+
+	shopt -s nullglob
+  local rtl_files=(rtl/include/*.v)
+  local tb_files=(tb/*.v)
+  shopt -u nullglob
+	
+	iverilog -o "simulation" $main_v "${rtl_files[@]}" $test_b
+	mv "simulation" sim/
+	vvp "sim/simulation"
 	echo " "
 	echo "=================================================="
 	echo " "
 	echo "opening gtkwave"
-	surfer $vcd
+	surfer "build/sim.vcd"
 }
 export -f run_hdl;
 
@@ -198,24 +214,39 @@ module ${base}_tb;
 
 ${base} uut();
 initial begin
-	\$dumpfile("${base}.vcd");
+	\$dumpfile("build/sim.vcd");
 	\$dumpvars(0, ${base}_tb);
 	\$finish;
 end
 endmodule
 EOF
 
+	mkdir rtl
+	mkdir rtl/include
+	mv $v_file rtl/$v_file
+	mkdir tb
+	mv $test_b tb/$test_b
+	mkdir build
+	mkdir sim
+	touch verible.filelist
+
+	find rtl tb -type f \( -name "*.v" -o -name "*.sv" -o -name "*.svh" \) | sort > verible.filelist
+
 }
 export -f hdl_make;
 
+load_verible_list () {
+	find rtl tb -type f \( -name "*.v" -o -name "*.sv" -o -name "*.svh" \) | sort > verible.filelist
+}
+export -f load_verible_list;
+
 make_schem() {
-	local file=$1
+	local main_v=$1
+	local file="${1##*/}"
 	local base=${file%.*}
-	yosys -p "read_verilog ${file} ; synth -auto-top ; abc -g gates ; write_json ${base}.json"
-	netlistsvg $base.json -o $base.svg
-	mkdir schematic
-	mv ${base}.json schematic/
-	mv $base.svg schematic/
+	echo $file
+	yosys -p "read_verilog rtl/${base}.v ; synth -auto-top ; abc -g gates ; write_json build/${base}.json"
+	netlistsvg build/$base.json -o build/$base.svg
 }
 export BUN_INSTALL="$HOME/.BUN"
 export PATH="$BUN_INSTALL/bin:$PATH"
